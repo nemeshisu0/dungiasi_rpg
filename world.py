@@ -2,134 +2,180 @@
 world.py
 ========
 Contenuti di gioco: oggetti, mostri, aree e dungeon.
-Include consumabili per HP, Mana e Stamina.
+Supporta la localizzazione bilingue (italiano / inglese) tramite i18n.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from config import Direction, ItemType, Rarity
+from i18n import AREA_DATA, ITEM_DATA, MONSTER_DATA, get_language, set_language
 from models import Area, DropEntry, Item, Monster
 
 if TYPE_CHECKING:
     from engine import GameEngine
 
 
-def popola_mondo(engine: "GameEngine") -> None:
-    """Registra nell'engine aree, mostri, equipaggiamento e pozioni."""
+def popola_mondo(engine: "GameEngine", lang: Optional[str] = None) -> None:
+    """Registra nell'engine aree, mostri, equipaggiamento e pozioni nella lingua selezionata."""
+    if lang is not None:
+        set_language(lang)
+    l = get_language()
+
+    def item_info(item_id: str) -> dict:
+        return ITEM_DATA.get(item_id, {}).get(l, ITEM_DATA.get(item_id, {}).get("it", {"nome": item_id, "desc": ""}))
+
+    def monster_info(mon_id: str) -> dict:
+        return MONSTER_DATA.get(mon_id, {}).get(l, MONSTER_DATA.get(mon_id, {}).get("it", {"nome": mon_id}))
+
+    def area_info(area_id: str) -> dict:
+        return AREA_DATA.get(area_id, {}).get(l, AREA_DATA.get(area_id, {}).get("it", {"nome": area_id, "desc": ""}))
 
     # =================================================================
     # ARMI
     # =================================================================
+    info = item_info("spada_ferro")
     spada_ferro = Item(
-        id="spada_ferro", nome="Spada di Ferro", tipo=ItemType.ARMA,
+        id="spada_ferro", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/spada_ferro.png",
-        bonus_attacco=4, valore=20, descrizione="Una solida lama di ferro a un filo.",
+        bonus_attacco=4, valore=20, descrizione=info["desc"],
     )
+
+    info = item_info("spadone_due_mani")
     spadone_due_mani = Item(
-        id="spadone_due_mani", nome="Spadone a Due Mani", tipo=ItemType.ARMA,
+        id="spadone_due_mani", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.RARO, sprite_path="assets/items/spadone_due_mani.png",
-        bonus_attacco=10, valore=80, descrizione="Pesante e devastante, ideale per il Guerriero.",
+        bonus_attacco=10, valore=80, descrizione=info["desc"],
     )
+
+    info = item_info("bastone_legno")
     bastone_legno = Item(
-        id="bastone_legno", nome="Bastone di Frassino", tipo=ItemType.ARMA,
+        id="bastone_legno", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/bastone_legno.png",
-        bonus_attacco=3, valore=18, descrizione="Canalizza debolmente l'energia magica.",
+        bonus_attacco=3, valore=18, descrizione=info["desc"],
     )
+
+    info = item_info("bastone_arcano")
     bastone_arcano = Item(
-        id="bastone_arcano", nome="Bastone delle Maree Arcane", tipo=ItemType.ARMA,
+        id="bastone_arcano", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.RARO, sprite_path="assets/items/bastone_arcano.png",
-        bonus_attacco=8, valore=75, descrizione="Un cristallo brillante amplifica i dardi arcani.",
+        bonus_attacco=8, valore=75, descrizione=info["desc"],
     )
+
+    info = item_info("tomo_preghiere")
     tomo_preghiere = Item(
-        id="tomo_preghiere", nome="Tomo dei Riti Curativi", tipo=ItemType.ARMA,
+        id="tomo_preghiere", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/tomo_preghiere.png",
-        bonus_attacco=3, valore=22, descrizione="Pagine intrise di formule di soccorso.",
+        bonus_attacco=3, valore=22, descrizione=info["desc"],
     )
+
+    info = item_info("tomo_santificato")
     tomo_santificato = Item(
-        id="tomo_santificato", nome="Codice della Grazia Divina", tipo=ItemType.ARMA,
+        id="tomo_santificato", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.RARO, sprite_path="assets/items/tomo_santificato.png",
-        bonus_attacco=7, valore=85, descrizione="Emana calore sacro respingendo le tenebre.",
+        bonus_attacco=7, valore=85, descrizione=info["desc"],
     )
+
+    info = item_info("lancia_guardia")
     lancia_guardia = Item(
-        id="lancia_guardia", nome="Lancia della Guardia", tipo=ItemType.ARMA,
+        id="lancia_guardia", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/lancia_guardia.png",
-        bonus_attacco=4, valore=25, descrizione="Asta bilanciata per colpire mantenendo la guardia.",
+        bonus_attacco=4, valore=25, descrizione=info["desc"],
     )
+
+    info = item_info("pugnale_acciaio")
     pugnale_acciaio = Item(
-        id="pugnale_acciaio", nome="Pugnale d'Acciaio", tipo=ItemType.ARMA,
+        id="pugnale_acciaio", nome=info["nome"], tipo=ItemType.ARMA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/pugnale_acciaio.png",
-        bonus_attacco=2, valore=15, descrizione="Leggero e maneggevole.",
+        bonus_attacco=2, valore=15, descrizione=info["desc"],
     )
 
     # =================================================================
     # ARMATURE
     # =================================================================
+    info = item_info("veste_magica")
     veste_magica = Item(
-        id="veste_magica", nome="Tunica del Novizio", tipo=ItemType.ARMATURA,
+        id="veste_magica", nome=info["nome"], tipo=ItemType.ARMATURA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/veste_magica.png",
-        bonus_difesa=2, valore=15, descrizione="Tessuto leggero che non ostacola la concentrazione.",
+        bonus_difesa=2, valore=15, descrizione=info["desc"],
     )
+
+    info = item_info("veste_runica")
     veste_runica = Item(
-        id="veste_runica", nome="Veste Tessuta di Rune", tipo=ItemType.ARMATURA,
+        id="veste_runica", nome=info["nome"], tipo=ItemType.ARMATURA,
         rarita=Rarity.RARO, sprite_path="assets/items/veste_runica.png",
-        bonus_difesa=5, valore=65, descrizione="Simboli protettivi contro incantesimi.",
+        bonus_difesa=5, valore=65, descrizione=info["desc"],
     )
+
+    info = item_info("armatura_cuoio")
     armatura_cuoio = Item(
-        id="armatura_cuoio", nome="Armatura di Cuoio Indurito", tipo=ItemType.ARMATURA,
+        id="armatura_cuoio", nome=info["nome"], tipo=ItemType.ARMATURA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/armatura_cuoio.png",
-        bonus_difesa=4, valore=25, descrizione="Protegge dagli artigli senza limitare la mobilita'.",
+        bonus_difesa=4, valore=25, descrizione=info["desc"],
     )
+
+    info = item_info("scudo_legno")
     scudo_legno = Item(
-        id="scudo_legno", nome="Scudo di Legno Rinforzato", tipo=ItemType.ARMATURA,
+        id="scudo_legno", nome=info["nome"], tipo=ItemType.ARMATURA,
         rarita=Rarity.COMUNE, sprite_path="assets/items/scudo_legno.png",
-        bonus_difesa=3, valore=15, descrizione="Asce e denti faticano a penetrare le sue assi.",
+        bonus_difesa=3, valore=15, descrizione=info["desc"],
     )
+
+    info = item_info("scudo_runico")
     scudo_runico = Item(
-        id="scudo_runico", nome="Scudo a Torre Runico", tipo=ItemType.ARMATURA,
+        id="scudo_runico", nome=info["nome"], tipo=ItemType.ARMATURA,
         rarita=Rarity.RARO, sprite_path="assets/items/scudo_runico.png",
-        bonus_difesa=8, valore=75, descrizione="Una fortezza portatile ideale per sostenere il Baluardo.",
+        bonus_difesa=8, valore=75, descrizione=info["desc"],
     )
+
+    info = item_info("corazza_piastre")
     corazza_piastre = Item(
-        id="corazza_piastre", nome="Corazza di Piastre Forgiata", tipo=ItemType.ARMATURA,
+        id="corazza_piastre", nome=info["nome"], tipo=ItemType.ARMATURA,
         rarita=Rarity.RARO, sprite_path="assets/items/corazza_piastre.png",
-        bonus_difesa=9, valore=90, descrizione="Acciaio temprato che attutisce i colpi violenti.",
+        bonus_difesa=9, valore=90, descrizione=info["desc"],
     )
 
     # =================================================================
     # CONSUMABILI (HP, Mana, Stamina) & OGGETTI SPECIALI
     # =================================================================
+    info = item_info("pozione_cura")
     pozione_cura = Item(
-        id="pozione_cura", nome="Pozione Curativa", tipo=ItemType.CONSUMABILE,
+        id="pozione_cura", nome=info["nome"], tipo=ItemType.CONSUMABILE,
         rarita=Rarity.COMUNE, sprite_path="assets/items/pozione_cura.png",
         cura_hp=25, consumabile=True, valore=10,
-        descrizione="Ripristina 25 punti ferita.",
+        descrizione=info["desc"],
     )
+
+    info = item_info("pozione_mana")
     pozione_mana = Item(
-        id="pozione_mana", nome="Elisir di Mana", tipo=ItemType.CONSUMABILE,
+        id="pozione_mana", nome=info["nome"], tipo=ItemType.CONSUMABILE,
         rarita=Rarity.COMUNE, sprite_path="assets/items/pozione_mana.png",
         cura_risorsa=25, consumabile=True, valore=15,
-        descrizione="Ricarica 25 punti Mana.",
+        descrizione=info["desc"],
     )
+
+    info = item_info("pozione_stamina")
     pozione_stamina = Item(
-        id="pozione_stamina", nome="Tonico del Vigore", tipo=ItemType.CONSUMABILE,
+        id="pozione_stamina", nome=info["nome"], tipo=ItemType.CONSUMABILE,
         rarita=Rarity.COMUNE, sprite_path="assets/items/pozione_stamina.png",
         cura_risorsa=35, consumabile=True, valore=12,
-        descrizione="Recupera 35 punti Stamina.",
+        descrizione=info["desc"],
     )
+
+    info = item_info("amuleto_drago")
     amuleto_drago = Item(
-        id="amuleto_drago", nome="Amuleto del Drago Ancestrale", tipo=ItemType.VARIE,
+        id="amuleto_drago", nome=info["nome"], tipo=ItemType.VARIE,
         rarita=Rarity.LEGGENDARIO, sprite_path="assets/items/amuleto_drago.png",
-        valore=500,
-        descrizione="Brilla di una luce rossa eterna, reliquia delle profondita'.",
+        valore=500, descrizione=info["desc"],
     )
 
     # =================================================================
     # MOSTRI
     # =================================================================
+    info_m = monster_info("pipistrello")
     pipistrello = Monster(
-        id="pipistrello", nome="Pipistrello Gigante", livello=1,
+        id="pipistrello", nome=info_m["nome"], livello=1,
         hp_max=18, attacco=6, difesa=2, exp_reward=10,
         sprite_path="assets/monsters/pipistrello.png",
         oro_min=1, oro_max=4,
@@ -139,8 +185,9 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("goblin")
     goblin = Monster(
-        id="goblin", nome="Goblin Esploratore", livello=1,
+        id="goblin", nome=info_m["nome"], livello=1,
         hp_max=25, attacco=8, difesa=3, exp_reward=15,
         sprite_path="assets/monsters/goblin.png",
         oro_min=2, oro_max=8,
@@ -152,8 +199,9 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("ragno")
     ragno = Monster(
-        id="ragno", nome="Ragno Velenoso", livello=2,
+        id="ragno", nome=info_m["nome"], livello=2,
         hp_max=35, attacco=11, difesa=4, exp_reward=25,
         sprite_path="assets/monsters/ragno.png",
         oro_min=4, oro_max=12,
@@ -164,8 +212,9 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("scheletro")
     scheletro = Monster(
-        id="scheletro", nome="Guardiano Scheletrico", livello=2,
+        id="scheletro", nome=info_m["nome"], livello=2,
         hp_max=40, attacco=10, difesa=6, exp_reward=28,
         sprite_path="assets/monsters/scheletro.png",
         oro_min=5, oro_max=15,
@@ -177,8 +226,9 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("orco")
     orco = Monster(
-        id="orco", nome="Orco Guerriero", livello=3,
+        id="orco", nome=info_m["nome"], livello=3,
         hp_max=60, attacco=14, difesa=6, exp_reward=45,
         sprite_path="assets/monsters/orco.png",
         oro_min=10, oro_max=25,
@@ -190,8 +240,9 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("spettro")
     spettro = Monster(
-        id="spettro", nome="Spettro Tormentato", livello=4,
+        id="spettro", nome=info_m["nome"], livello=4,
         hp_max=50, attacco=18, difesa=3, exp_reward=60,
         sprite_path="assets/monsters/spettro.png",
         oro_min=15, oro_max=35,
@@ -203,8 +254,9 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("golem")
     golem = Monster(
-        id="golem", nome="Golem di Pietra", livello=5,
+        id="golem", nome=info_m["nome"], livello=5,
         hp_max=95, attacco=16, difesa=14, exp_reward=90,
         sprite_path="assets/monsters/golem.png",
         oro_min=25, oro_max=60,
@@ -215,106 +267,127 @@ def popola_mondo(engine: "GameEngine") -> None:
         ],
     )
 
+    info_m = monster_info("drago")
     drago = Monster(
-        id="drago", nome="Drago Ancestrale", livello=8,
+        id="drago", nome=info_m["nome"], livello=8,
         hp_max=180, attacco=25, difesa=14, exp_reward=350,
         sprite_path="assets/monsters/drago.png",
         oro_min=150, oro_max=300,
         is_boss=True, fase=1, fasi=2,
-        abilita_boss="Soffio Infernale",
+        abilita_boss=info_m.get("abilita_boss", "Soffio Infernale"),
         drop_table=[DropEntry(item=amuleto_drago, peso=1.0, chance=1.0)],
     )
 
     # =================================================================
     # AREE
     # =================================================================
+    info_a = area_info("ingresso")
+    ingresso = Area(
+        id="ingresso",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/ingresso.png",
+        mostri_possibili=[pipistrello, goblin],
+        chance_incontro=0.25,
+        uscite={Direction.NORD: "atrio"},
+    )
+
+    info_a = area_info("atrio")
+    atrio = Area(
+        id="atrio",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/atrio.png",
+        mostri_possibili=[goblin],
+        chance_incontro=0.4,
+        uscite={
+            Direction.SUD: "ingresso",
+            Direction.OVEST: "caverne",
+            Direction.EST: "cripta",
+            Direction.NORD: "sala_guardie",
+        },
+    )
+
+    info_a = area_info("caverne")
+    caverne = Area(
+        id="caverne",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/caverne.png",
+        mostri_possibili=[pipistrello, ragno],
+        chance_incontro=0.55,
+        uscite={Direction.EST: "atrio", Direction.NORD: "nido_ragni"},
+    )
+
+    info_a = area_info("nido_ragni")
+    nido_ragni = Area(
+        id="nido_ragni",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/nido_ragni.png",
+        mostri_possibili=[ragno],
+        chance_incontro=0.65,
+        uscite={Direction.SUD: "caverne"},
+    )
+
+    info_a = area_info("cripta")
+    cripta = Area(
+        id="cripta",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/cripta.png",
+        mostri_possibili=[scheletro, spettro],
+        chance_incontro=0.5,
+        uscite={Direction.OVEST: "atrio", Direction.NORD: "catacombe"},
+    )
+
+    info_a = area_info("catacombe")
+    catacombe = Area(
+        id="catacombe",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/catacombe.png",
+        mostri_possibili=[scheletro, spettro, orco],
+        chance_incontro=0.6,
+        uscite={Direction.SUD: "cripta"},
+    )
+
+    info_a = area_info("sala_guardie")
+    sala_guardie = Area(
+        id="sala_guardie",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/sala_guardie.png",
+        mostri_possibili=[scheletro, orco],
+        chance_incontro=0.5,
+        uscite={Direction.SUD: "atrio", Direction.NORD: "corridoio_runico"},
+    )
+
+    info_a = area_info("corridoio_runico")
+    corridoio_runico = Area(
+        id="corridoio_runico",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/corridoio_runico.png",
+        mostri_possibili=[orco, golem],
+        chance_incontro=0.65,
+        uscite={Direction.SUD: "sala_guardie", Direction.NORD: "sala_trono"},
+    )
+
+    info_a = area_info("sala_trono")
+    sala_trono = Area(
+        id="sala_trono",
+        nome=info_a["nome"],
+        descrizione=info_a["desc"],
+        background_sprite_path="assets/areas/sala_trono.png",
+        mostri_possibili=[drago],
+        chance_incontro=0.85,
+        uscite={Direction.SUD: "corridoio_runico"},
+    )
+
     aree = [
-        Area(
-            id="ingresso",
-            nome="Ingresso del Dungeon",
-            descrizione="Un massiccio cancello di pietra logorato dai secoli. Verso nord le tenebre si infittiscono.",
-            background_sprite_path="assets/areas/ingresso.png",
-            mostri_possibili=[pipistrello, goblin],
-            chance_incontro=0.25,
-            uscite={Direction.NORD: "atrio"},
-        ),
-        Area(
-            id="atrio",
-            nome="Atrio dei Bivi",
-            descrizione="Un'ampia sala circolare con colonne spezzate. Cunicoli scavati nella roccia si diramano a est e ovest.",
-            background_sprite_path="assets/areas/atrio.png",
-            mostri_possibili=[goblin],
-            chance_incontro=0.4,
-            uscite={
-                Direction.SUD: "ingresso",
-                Direction.OVEST: "caverne",
-                Direction.EST: "cripta",
-                Direction.NORD: "sala_guardie",
-            },
-        ),
-        Area(
-            id="caverne",
-            nome="Caverne Umide",
-            descrizione="Stalattiti gocciolano dal soffitto. L'aria odora di terra umida e muschio fungino.",
-            background_sprite_path="assets/areas/caverne.png",
-            mostri_possibili=[pipistrello, ragno],
-            chance_incontro=0.55,
-            uscite={Direction.EST: "atrio", Direction.NORD: "nido_ragni"},
-        ),
-        Area(
-            id="nido_ragni",
-            nome="Nido dei Ragni",
-            descrizione="Fitte ragnatele bianche ricoprono pareti e vecchi resti di scheletri appesi.",
-            background_sprite_path="assets/areas/nido_ragni.png",
-            mostri_possibili=[ragno],
-            chance_incontro=0.65,
-            uscite={Direction.SUD: "caverne"},
-        ),
-        Area(
-            id="cripta",
-            nome="Cripta Dimenticata",
-            descrizione="Sarcofagi aperti e polvere d'ossa. Una brezza gelida spegne quasi il chiarore delle torce.",
-            background_sprite_path="assets/areas/cripta.png",
-            mostri_possibili=[scheletro, spettro],
-            chance_incontro=0.5,
-            uscite={Direction.OVEST: "atrio", Direction.NORD: "catacombe"},
-        ),
-        Area(
-            id="catacombe",
-            nome="Catacombe Profonde",
-            descrizione="Loculi scavati nel tufo su ogni parete. Si sentono lamenti soffusi in lontananza.",
-            background_sprite_path="assets/areas/catacombe.png",
-            mostri_possibili=[scheletro, spettro, orco],
-            chance_incontro=0.6,
-            uscite={Direction.SUD: "cripta"},
-        ),
-        Area(
-            id="sala_guardie",
-            nome="Sala delle Guardie",
-            descrizione="Tavolacci ribaltati e scudi spezzati testimoniano un'antica guarnigione caduta in battaglia.",
-            background_sprite_path="assets/areas/sala_guardie.png",
-            mostri_possibili=[scheletro, orco],
-            chance_incontro=0.5,
-            uscite={Direction.SUD: "atrio", Direction.NORD: "corridoio_runico"},
-        ),
-        Area(
-            id="corridoio_runico",
-            nome="Corridoio delle Rune",
-            descrizione="Pietre megalitiche incise di glifi luminosi. L'accesso alle profondita' e' difeso da colossi di pietra.",
-            background_sprite_path="assets/areas/corridoio_runico.png",
-            mostri_possibili=[orco, golem],
-            chance_incontro=0.65,
-            uscite={Direction.SUD: "sala_guardie", Direction.NORD: "sala_trono"},
-        ),
-        Area(
-            id="sala_trono",
-            nome="Sala del Trono Ancestrale",
-            descrizione="Un'immensa caverna con un trono dorato in rovina. Un colossale drago dorme circondato da tesori.",
-            background_sprite_path="assets/areas/sala_trono.png",
-            mostri_possibili=[drago],
-            chance_incontro=0.85,
-            uscite={Direction.SUD: "corridoio_runico"},
-        ),
+        ingresso, atrio, caverne, nido_ragni,
+        cripta, catacombe, sala_guardie, corridoio_runico, sala_trono,
     ]
 
     for area in aree:

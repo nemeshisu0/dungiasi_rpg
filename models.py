@@ -23,6 +23,14 @@ from config import (
     ResourceType,
 )
 from formulas import exp_richiesta_per_livello
+from i18n import (
+    get_class_name,
+    get_direction_label,
+    get_item_type_name,
+    get_rarity_name,
+    get_resource_name,
+    t,
+)
 
 
 @dataclass
@@ -45,8 +53,8 @@ class Item:
         return {
             "id": self.id,
             "nome": self.nome,
-            "tipo": self.tipo.value,
-            "rarita": self.rarita.value,
+            "tipo": get_item_type_name(self.tipo),
+            "rarita": get_rarity_name(self.rarita),
             "sprite_path": self.sprite_path,
             "descrizione": self.descrizione,
             "bonus_attacco": self.bonus_attacco,
@@ -303,23 +311,23 @@ class Player:
         """Rimuove l'arma ('arma') o l'armatura ('armatura') e la rimette
         nell'inventario se c'e' spazio sufficiente."""
         slot_norm = slot.strip().lower()
-        if slot_norm not in ("arma", "armatura"):
-            return False, None, f"Slot '{slot}' non valido (scegli 'arma' o 'armatura')."
+        if slot_norm not in ("arma", "armatura", "weapon", "armor"):
+            return False, None, t("slot_invalid", slot=slot)
 
-        item_attivo = self.equip.arma if slot_norm == "arma" else self.equip.armatura
+        item_attivo = self.equip.arma if slot_norm in ("arma", "weapon") else self.equip.armatura
         if item_attivo is None:
-            return False, None, f"Nessun equipaggiamento nello slot {slot_norm}."
+            return False, None, t("slot_empty", slot=slot_norm)
 
         if len(self.inventario) >= self.max_inventario:
-            return False, None, f"Inventario pieno ({len(self.inventario)}/{self.max_inventario}): impossibile disequipaggiare."
+            return False, None, t("inventory_full_unequip", used=len(self.inventario), max=self.max_inventario)
 
-        if slot_norm == "arma":
+        if slot_norm in ("arma", "weapon"):
             self.equip.arma = None
         else:
             self.equip.armatura = None
 
         self.aggiungi_oggetto(item_attivo)
-        return True, item_attivo, f"Hai disequipaggiato {item_attivo.nome} dallo slot {slot_norm}."
+        return True, item_attivo, t("unequipped_success", item=item_attivo.nome, slot=slot_norm)
 
     def scarta_oggetto(self, item: Item) -> bool:
         """Rimuove definitivamente un oggetto dall'inventario."""
@@ -331,12 +339,12 @@ class Player:
     def to_render_dict(self) -> Dict[str, Any]:
         return {
             "nome": self.nome,
-            "classe": self.classe.value,
+            "classe": get_class_name(self.classe),
             "livello": self.livello,
             "hp_corrente": self.hp_corrente, "hp_max": self.hp_max,
             "attacco": self.attacco_totale, "difesa": self.difesa_totale,
             "velocita": self.velocita,
-            "risorsa_nome": self.risorsa_tipo.value,
+            "risorsa_nome": get_resource_name(self.risorsa_tipo),
             "risorsa_corrente": self.risorsa_corrente,
             "risorsa_max": self.risorsa_max,
             "effetti_attivi": dict(self.effetti_attivi),
@@ -440,5 +448,5 @@ class Area:
         return {
             "id": self.id, "nome": self.nome, "descrizione": self.descrizione,
             "sprite_path": self.background_sprite_path,
-            "uscite_disponibili": [d.value for d in self.uscite],
+            "uscite_disponibili": [get_direction_label(d.value) for d in self.uscite],
         }

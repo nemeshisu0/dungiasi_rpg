@@ -13,11 +13,12 @@
 [![Python Version](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/)
+[![Language: IT + EN](https://img.shields.io/badge/Language-Italiano%20%7C%20English-blue.svg?style=for-the-badge)](README.md)
 [![Graphics](https://img.shields.io/badge/Rendering-Chafa%20%2B%20Kitty%20%2B%20GUI-9B5DE5?style=for-the-badge)](https://github.com/)
 [![Architecture](https://img.shields.io/badge/Architecture-Pure%20Engine%20%26%20Zero%20Deps-4EBA6F?style=for-the-badge)](https://github.com/)
 
 <p align="center">
-  <b>4 Classi Uniche</b> • <b>Risorse Tattiche</b> • <b>Loot Ponderato</b> • <b>Boss a 2 Fasi</b> • <b>Supporto Pixel-Art Terminale</b>
+  <b>🌐 Bilingue (IT/EN)</b> • <b>4 Classi Uniche</b> • <b>Risorse Tattiche</b> • <b>Loot Ponderato</b> • <b>Boss a 2 Fasi</b> • <b>Pixel-Art Terminale</b>
 </p>
 
 ---
@@ -55,6 +56,7 @@ A differenza dei tipici giochi testuali statici, il sistema offre:
 
 | Caratteristica | Descrizione |
 |---|---|
+| 🌐 **Supporto Multilingua (i18n)** | Selezionabile all'avvio: **Italiano** o **English** con tutti i testi, oggetti, abilità e log tradotti. |
 | 🎮 **Combattimento Tattico a Turni** | Attacchi base, abilità speciali di classe, uso di pozioni e tentativo di fuga strategico. |
 | 🛡️ **Equipaggiamento Dinamico** | Gestione slot Arma e Armatura con ricalcolo immediato delle statistiche e swap automatico. |
 | 🐲 **Incontri & Boss Multi-Fase** | 8 tipologie di mostri con livelli scalati e un temibile **Drago Ancestrale** dotato di 2 fasi di combattimento. |
@@ -153,14 +155,18 @@ python3 main.py
 Il gioco include flag avanzati per test, benchmark e personalizzazione dell'esperienza:
 
 ```bash
-# Avvia la partita normalmente
+# Avvia la partita (ti verrà chiesto di scegliere la lingua tra Italiano ed English)
 python3 main.py
+
+# Avvia direttamente in lingua inglese o italiana
+python3 main.py --lang en
+python3 main.py --lang it
 
 # Avvia con finestra grafica Companion (richiede Tkinter)
 python3 main.py --window
 
-# Esegui una partita bot automatica (classe Guerriero, 60 passi)
-python3 main.py --demo --classe guerriero
+# Esegui una partita bot automatica (supporta classi in IT o EN: warrior, mage, knight, cleric)
+python3 main.py --demo --classe warrior --lang en
 
 # Test riproducibile specificando un seed casuale
 python3 main.py --demo --classe cavaliere --seed 42
