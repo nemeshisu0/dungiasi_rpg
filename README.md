@@ -141,7 +141,7 @@ dungiasi_rpg/
 ### Avvio
 Clona la repository ed avvia il gioco:
 ```bash
-git clone https://github.com/TUO_USERNAME/dungiasi_rpg.git
+git clone https://github.com/nemeshisu0/dungiasi_rpg.git
 cd dungiasi_rpg
 python3 main.py
 ```
