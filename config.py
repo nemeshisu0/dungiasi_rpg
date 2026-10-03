@@ -109,7 +109,7 @@ BALUARDO_PERC_RIFLESSO = 0.25     # 25% del danno subito viene riflesso
 # --- Rendering CLI e Companion GUI ---
 CHAFA_ARGS_PIXEL_ART = ["--symbols=vhalf", "--dither=none", "--size=40x20"]
 CHAFA_ARGS_KITTY = ["-f", "kitty", "--size=40x20"]
-GUI_WINDOW_TITLE = "Dungeon Crawler - Asset Viewer"
+GUI_WINDOW_TITLE = "Dungiasi RPG - Asset Viewer"
 GUI_WINDOW_SIZE = "400x400"
 
 

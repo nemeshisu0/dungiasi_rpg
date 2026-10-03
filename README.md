@@ -1,14 +1,14 @@
 <div align="center">
 
 ```text
-  ___                                     ____  ____   ____ 
- |   \ _  _ _ _  __ _ ___ ___ _ _  ___   |  _ \|  _ \ / ___|
- | |) | || | ' \/ _` / -_) _ \ ' \(_-<   | |_) | |_) | |  _ 
- |___/ \_,_|_||_\__, \___\___/_||_/__/   |  _ <|  __/| |_| |
-                |___/                    |_| \_\_|    \____|
+  ____  _   _ _   _  ____ ___    _    ____ ___   ____  ____   ____ 
+ |  _ \| | | | \ | |/ ___|_ _|  / \  / ___|_ _| |  _ \|  _ \ / ___|
+ | | | | | | |  \| | |  _ | |  / _ \ \___ \ | |  | |_) | |_) | |  _ 
+ | |_| | |_| | |\  | |_| || | / ___ \ ___) || |  |  _ <|  __/| |_| |
+ |____/ \___/|_| \_|\____|___/_/   \_\____/|___| |_| \_\_|    \____|
 ```
 
-### ⚔️ Un Dungeon Crawler GDR tattico a turni per Terminale 🛡️
+### ⚔️ Dungiasi RPG — Dungeon Crawler Tattico a Turni per Terminale 🛡️
 
 [![Python Version](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
@@ -41,7 +41,7 @@
 
 ## 🧭 Panoramica del Progetto
 
-**Dungeon RPG** è un gioco di ruolo testuale a scelte sviluppato in **Python puro**, progettato con una separazione architetturale pulita tra logica di gioco (*Game Engine* a stati finiti) e interfaccia utente (*CLI Frontend*).
+**Dungiasi RPG** è un gioco di ruolo testuale a scelte sviluppato in **Python puro**, progettato con una separazione architetturale pulita tra logica di gioco (*Game Engine* a stati finiti) e interfaccia utente (*CLI Frontend*).
 
 A differenza dei tipici giochi testuali statici, il sistema offre:
 1. **Risorse di combattimento asimmetriche**: Ogni classe non si distingue solo per le statistiche numeriche, ma per un sistema di risorse completamente differente (accumulo di Furia subendo/infliggendo colpi, consumo di Mana con rigenerazione a turno o gestione della Stamina).
@@ -108,7 +108,7 @@ flowchart TD
 Il codice rispetta una rigorosa gerarchia di dipendenze acicliche:
 
 ```
-dungeon_rpg/
+dungiasi_rpg/
 ├── config.py         # Costanti di bilanciamento, profili classi ed enumerazioni
 ├── formulas.py       # Funzioni pure matematiche (mitigazione danno, curve EXP, loot)
 ├── models.py         # Data classes (Player, Monster, Item, Equipaggiamento, Area)
@@ -141,8 +141,8 @@ dungeon_rpg/
 ### Avvio
 Clona la repository ed avvia il gioco:
 ```bash
-git clone https://github.com/TUO_USERNAME/dungeon_rpg.git
-cd dungeon_rpg
+git clone https://github.com/TUO_USERNAME/dungiasi_rpg.git
+cd dungiasi_rpg
 python3 main.py
 ```
 

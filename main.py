@@ -58,7 +58,7 @@ def _gui_worker(gui_q: queue.Queue[str], titolo: str, dimensioni: str) -> None:
         root.geometry(dimensioni)
         root.resizable(True, True)
 
-        header = tk.Label(root, text="Dungeon Crawler - Asset Viewer", font=("Helvetica", 11, "bold"))
+        header = tk.Label(root, text="Dungiasi RPG - Asset Viewer", font=("Helvetica", 11, "bold"))
         header.pack(pady=6)
 
         img_label = tk.Label(root, text="(In attesa del primo evento di gioco...)")
@@ -543,7 +543,7 @@ def loop_interattivo(engine: GameEngine) -> None:
     ctx: Dict[str, Any] = {}
 
     if engine.esiste_salvataggio():
-        print("\n=== DUNGEON CRAWLER RPG ===")
+        print("\n=== DUNGIASI RPG ===")
         print("  [1] Nuova Partita")
         print("  [2] Carica Partita")
         print("  [q] Esci")
@@ -639,7 +639,7 @@ def loop_demo(engine: GameEngine, classe: PlayerClass) -> None:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
-    parser = argparse.ArgumentParser(description="Dungeon Crawler RPG testuale a turni")
+    parser = argparse.ArgumentParser(description="Dungiasi RPG - Dungeon Crawler GDR testuale a turni")
     parser.add_argument("--demo", action="store_true", help="esegue una partita automatica")
     parser.add_argument("--classe", choices=[c.name.lower() for c in PlayerClass],
                         default="guerriero", help="classe usata in modalita' --demo")
